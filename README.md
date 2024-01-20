@@ -86,7 +86,7 @@ Here is the full API for the `<ReorderList>` component, these properties can be 
 | - | - | - | - | - |
 | `useOnlyIconToDrag` | `Boolean` | No | true | See [usage with ReorderIcon](#usage-with-reordericon) |
 | `selectedItemOpacity` | `Number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
-| `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - |  |
+| `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
 | `disable` | `Boolean` | No | false | When set to true, `ReorderList` will work as a plain `div` with no functionality. |
 | `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |
 ### Types

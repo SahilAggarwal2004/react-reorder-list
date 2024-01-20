@@ -1,0 +1,40 @@
+{
+  "name": "react-reorder-list",
+  "version": "0.1.0",
+  "description": "A simple react component that facilitates the reordering of JSX/HTML elements through drag-and-drop functionality, allowing for easy position changes.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "pnpm i && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SahilAggarwal2004/react-reorder-list.git"
+  },
+  "keywords": [
+    "react-reorder-list",
+    "react",
+    "reorder",
+    "list",
+    "component",
+    "drag-and-drop",
+    "dnd",
+    "typescript",
+    "jsx",
+    "html"
+  ],
+  "author": "Sahil Aggarwal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SahilAggarwal2004/react-reorder-list/issues"
+  },
+  "homepage": "https://github.com/SahilAggarwal2004/react-reorder-list#readme",
+  "peerDependencies": {
+    "react": ">=16.0.0",
+    "react-dom": ">=16.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.48"
+  }
+}

@@ -32,7 +32,7 @@ import ReorderList from 'react-reorder-list'
 
 export default function App() {
     return <ReorderList useOnlyIconToDrag={false}>
-        {[0, 1, 2, 3, 4].map(i=> {
+        {[0, 1, 2, 3, 4].map(i => {
             {/* Having a unique key is important */}
             return <div key={i}>{i}</div>
         })}
@@ -47,9 +47,12 @@ import ReorderList, { ReorderIcon } from 'react-reorder-list'
 
 export default function App() {
     return <ReorderList>
-        {[0, 1, 2, 3, 4].map(i=> {
+        {[0, 1, 2, 3, 4].map(i => {
             return <div key={i}>
-                <ReorderIcon />
+                <ReorderIcon /> {/* Default icon */}
+                <ReorderIcon>
+                    {/* Custom icon/component */}
+                </Reordericon>
                 <span>{i}</span>
             </div>
         })}

@@ -83,7 +83,7 @@ export default function App() {
     </ReorderList>
 }
 ```
-## Speech Component API Reference
+## ReorderList Component API Reference
 Here is the full API for the `<ReorderList>` component, these properties can be set on an instance of ReorderList:
 | Parameter | Type | Required | Default | Description |
 | - | - | - | - | - |

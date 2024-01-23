@@ -31,7 +31,7 @@ import React from 'react'
 import ReorderList from 'react-reorder-list'
 
 export default function App() {
-    return <ReorderList useOnlyIconToDrag={false}>
+    return <ReorderList>
         {[0, 1, 2, 3, 4].map(i => {
             {/* Having a unique key is important */}
             return <div key={i}>{i}</div>
@@ -46,7 +46,7 @@ import React from 'react'
 import ReorderList, { ReorderIcon } from 'react-reorder-list'
 
 export default function App() {
-    return <ReorderList>
+    return <ReorderList useOnlyIconToDrag={true}>
         {[0, 1, 2, 3, 4].map(i => {
             return <div key={i}>
                 <ReorderIcon /> {/* Default icon */}
@@ -68,9 +68,8 @@ export default function App() {
     return <ReorderList>
         {[0, 1, 2].map(i => {
             return <div key={i}>
-                <ReorderIcon />
                 <span>{'Parent' + i}</span>
-                <ReorderList>
+                <ReorderList useOnlyIconToDrag={true}>
                     {[0, 1, 2].map(j => {
                         return <div key={j} style={{ paddingLeft: '16px' }}>
                             <ReorderIcon />
@@ -87,8 +86,9 @@ export default function App() {
 Here is the full API for the `<ReorderList>` component, these properties can be set on an instance of ReorderList:
 | Parameter | Type | Required | Default | Description |
 | - | - | - | - | - |
-| `useOnlyIconToDrag` | `Boolean` | No | true | See [usage with ReorderIcon](#usage-with-reordericon) |
+| `useOnlyIconToDrag` | `Boolean` | No | false | See [usage with ReorderIcon](#usage-with-reordericon) |
 | `selectedItemOpacity` | `Number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
+| `animationDuration` | `Number` | No | 400 | The duration of swapping animation between items. If set to 0, animation will be disabled. |
 | `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
 | `disable` | `Boolean` | No | false | When set to true, `ReorderList` will work as a plain `div` with no functionality. |
 | `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |

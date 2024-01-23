@@ -25,7 +25,7 @@ To install react-reorder-list
 
 Items in this list can be reordered by simply dragging an item and dropping it in place of another item.
 #### Basic Usage
-An item can be dragged by clicking anywhere inside the item.
+Each `<div>` component inside `<ReorderList>` can now be drag-and-dropped to another `<div>` to reorder them.
 ```jsx
 import React from 'react'
 import ReorderList from 'react-reorder-list'
@@ -40,7 +40,11 @@ export default function App() {
 }
 ```
 #### Usage with ReorderIcon
-An item can be dragged only using the `<ReorderIcon>` present inside the item.
+The dragging behavior can be changed using the `useOnlyIconToDrag` prop of `<ReorderList>` component.
+
+If set to `true`, an item can be dragged only using the `<ReorderIcon>` present inside the item.
+
+If set to `false`, an item can be dragged by clicking anywhere inside the item.
 ```jsx
 import React from 'react'
 import ReorderList, { ReorderIcon } from 'react-reorder-list'
@@ -68,6 +72,7 @@ export default function App() {
     return <ReorderList>
         {[0, 1, 2].map(i => {
             return <div key={i}>
+                <ReorderIcon />
                 <span>{'Parent' + i}</span>
                 <ReorderList useOnlyIconToDrag={true}>
                     {[0, 1, 2].map(j => {

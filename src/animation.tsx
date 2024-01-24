@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, ReactNode, Children, isValidElement, useEffect, useRef } from "react";
+import React, { useState, useLayoutEffect, ReactNode, Children, useEffect, useRef } from "react";
 
 type AnimationProps = { duration: number, children: ReactNode }
 
@@ -12,10 +12,7 @@ function usePrevious<T>(value: T): T | undefined {
 
 function calculateBoundingBoxes(children: ReactNode) {
     const boundingBoxes: BoundingBox = {};
-    Children.forEach((children as ReactNode[]), (child, i) => {
-        // @ts-ignore
-        if (isValidElement(child)) boundingBoxes[child.key || i] = (child.ref.current as HTMLElement).getBoundingClientRect();
-    });
+    Children.forEach(children, child => boundingBoxes[((child as any).key as string).split("/.")[0]] = ((child as any).ref.current as HTMLElement).getBoundingClientRect());
     return boundingBoxes;
 };
 
@@ -29,12 +26,11 @@ function Animate({ duration, children }: AnimationProps) {
     }, [children]);
 
     useLayoutEffect(() => {
-        if (prevBoundingBox && Object.keys(prevBoundingBox).length) Children.forEach((children as ReactNode[]), (child, i) => {
-            if (!isValidElement(child)) return
-            // @ts-ignore
-            const domNode: HTMLElement = child.ref.current;
-            const { left: prevLeft, top: prevTop }: DOMRect = prevBoundingBox[child.key || i];
-            const { left, top }: DOMRect = boundingBox[child.key || i];
+        if (prevBoundingBox && Object.keys(prevBoundingBox).length) Children.forEach(children, child => {
+            const domNode: HTMLElement = (child as any).ref.current;
+            const key = ((child as any).key as string).split("/.")[0]
+            const { left: prevLeft, top: prevTop }: DOMRect = prevBoundingBox[key] || {};
+            const { left, top }: DOMRect = boundingBox[key];
             const changeInX = prevLeft - left, changeInY = prevTop - top;
             if (changeInX || changeInY) requestAnimationFrame(() => {
                 domNode.style.transform = `translate(${changeInX}px, ${changeInY}px)`;
@@ -51,5 +47,5 @@ function Animate({ duration, children }: AnimationProps) {
 };
 
 export default function Animation({ duration, children }: AnimationProps) {
-    return duration ? <Animate duration={duration}>{children}</Animate> : children
+    return duration > 0 ? <Animate duration={duration}>{children}</Animate> : children
 }

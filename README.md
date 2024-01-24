@@ -3,7 +3,8 @@ A simple react component that facilitates the reordering of JSX/HTML elements th
 ## Features
 - Reorders list of elements using drag and drop.
 - Easy to use
-- Fully Customizable
+- Smooth transition using animation.
+- Listen to children updates. See [listen to children updates](#listen-to-children-updates)
 - Handles nested lists easily. See [nested list usage](#nested-list-usage)
 ## Installation
 To install react-reorder-list
@@ -34,7 +35,7 @@ export default function App() {
     return <ReorderList>
         {[0, 1, 2, 3, 4].map(i => {
             {/* Having a unique key is important */}
-            return <div key={i}>{i}</div>
+            return <div key={i}>Item {i}</div>
         })}
     </ReorderList>
 }
@@ -61,6 +62,40 @@ export default function App() {
             </div>
         })}
     </ReorderList>
+}
+```
+#### Listen to Children Updates
+`<ReorderList>` can listen to updates to it's children components using the `watchChildrenUpdates` prop as shown below.
+
+If set to `true`, updates to children like state changes, additions/omissions of children components will reflect in real time.
+
+If set to `false`, any updates made in children component except reordering won't reflect.
+```jsx
+import React, { useState } from 'react'
+import ReorderList from 'react-reorder-list'
+
+export default function App() {
+    const [array, setArray] = useState([0, 1, 2, 3, 4])
+
+    function setNewArray() {
+        setArray(prev => {
+            const array = []
+            prev.forEach(_ => {
+                do {
+                    var item = Math.floor(Math.random() * 9)
+                } while (array.includes(item))
+                array.push(item)
+            })
+            return array
+        })
+    }
+
+    return <div>
+        <ReorderList watchChildrenUpdates={true} animationDuration={200}>
+            {array.map(i => <div key={i}>Item {i}</div>)}
+        </ReorderList>
+        <button onClick={setNewArray}>Click me</button>
+    </div>
 }
 ```
 #### Nested List Usage
@@ -93,9 +128,10 @@ Here is the full API for the `<ReorderList>` component, these properties can be 
 | - | - | - | - | - |
 | `useOnlyIconToDrag` | `Boolean` | No | false | See [usage with ReorderIcon](#usage-with-reordericon) |
 | `selectedItemOpacity` | `Number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
-| `animationDuration` | `Number` | No | 400 | The duration of swapping animation between items. If set to 0, animation will be disabled. |
+| `animationDuration` | `Number` | No | 400 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
+| `watchChildrenUpdates` | `Boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
 | `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
-| `disable` | `Boolean` | No | false | When set to true, `ReorderList` will work as a plain `div` with no functionality. |
+| `disable` | `Boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
 | `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |
 ### Types
 #### PositionChangeHandler

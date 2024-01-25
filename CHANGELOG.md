@@ -1,4 +1,7 @@
-# 0.3.0 (24-01-2024)
+# 0.3.1 (25-01-2024)
+- **changed:** `disable` prop to `disabled`. See [ReorderList Component API Reference](https://www.npmjs.com/package/react-reorder-list#reorderlist-component-api-reference)
+- **fixed:** minor bugs
+## 0.3.0 (24-01-2024)
 - **added:** `watchChildrenUpdates` prop in `<ReorderList>`. See [ReorderList Component API Reference](https://www.npmjs.com/package/react-reorder-list#reorderlist-component-api-reference)
 - **improved:** overall stability
 ## 0.2.0 (23-01-2024)

@@ -67,7 +67,7 @@ export default function App() {
 #### Listen to Children Updates
 `<ReorderList>` can listen to updates to it's children components using the `watchChildrenUpdates` prop as shown below.
 
-If set to `true`, updates to children like state changes, additions/omissions of children components will reflect in real time.
+If set to `true`, updates to children like state changes, additions/omissions of children components will reflect in real time. Note that if an item is being dragged and an update occurs at the moment, that item will be placed at respective location and `onPositionChange` will be called to prevent any inconsistency.
 
 If set to `false`, any updates made in children component except reordering won't reflect.
 ```jsx
@@ -131,7 +131,7 @@ Here is the full API for the `<ReorderList>` component, these properties can be 
 | `animationDuration` | `Number` | No | 400 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
 | `watchChildrenUpdates` | `Boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
 | `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
-| `disable` | `Boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
+| `disabled` | `Boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
 | `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |
 ### Types
 #### PositionChangeHandler

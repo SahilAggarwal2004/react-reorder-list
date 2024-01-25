@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, ReactNode, Children, useEffect, useRef } from "react";
+import { useState, useLayoutEffect, ReactNode, Children, useEffect, useRef } from "react";
 
 type AnimationProps = { duration: number, children: ReactNode }
 
@@ -16,17 +16,17 @@ function calculateBoundingBoxes(children: ReactNode) {
     return boundingBoxes;
 };
 
-function Animate({ duration, children }: AnimationProps) {
+export default function Animation({ duration, children }: AnimationProps) {
     const [boundingBox, setBoundingBox] = useState<BoundingBox>({});
     const prevBoundingBox = usePrevious(boundingBox)
 
     useLayoutEffect(() => {
-        const newBoundingBox = calculateBoundingBoxes(children);
-        setBoundingBox(newBoundingBox);
+        if (duration > 0) setBoundingBox(calculateBoundingBoxes(children));
+        else setBoundingBox({})
     }, [children]);
 
     useLayoutEffect(() => {
-        if (prevBoundingBox && Object.keys(prevBoundingBox).length) Children.forEach(children, child => {
+        if (duration > 0 && prevBoundingBox && Object.keys(prevBoundingBox).length) Children.forEach(children, child => {
             const domNode: HTMLElement = (child as any).ref.current;
             const key = ((child as any).key as string).split("/.")[0]
             const { left: prevLeft, top: prevTop }: DOMRect = prevBoundingBox[key] || {};
@@ -45,7 +45,3 @@ function Animate({ duration, children }: AnimationProps) {
 
     return children;
 };
-
-export default function Animation({ duration, children }: AnimationProps) {
-    return duration > 0 ? <Animate duration={duration}>{children}</Animate> : children
-}

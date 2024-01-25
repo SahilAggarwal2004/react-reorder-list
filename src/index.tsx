@@ -4,7 +4,7 @@ import Animation from "./animation.js"
 
 export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
-export type PositionChangeHandler = (params?: { start?: number, end?: number, oldItems?: ReactNode, newItems?: ReactNode }) => void
+export type PositionChangeHandler = (params?: { start?: number, end?: number, oldItems?: ReactNode[], newItems?: ReactNode[], revert?: () => void }) => void
 
 export type ReorderListProps = { useOnlyIconToDrag?: boolean, selectedItemOpacity?: number, animationDuration?: number, watchChildrenUpdates: boolean, onPositionChange?: PositionChangeHandler, disabled?: boolean, props?: Props, children?: ReactNode }
 
@@ -43,7 +43,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
     }, [children])
 
     function handleDragEnd(end: number) {
-        if (end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items })
+        if (end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items!) })
         setStart(-1)
         setSelected(-1)
     }

@@ -137,7 +137,15 @@ Here is the full API for the `<ReorderList>` component, these properties can be 
 #### PositionChangeHandler
 ```typescript
 import { ReactNode } from 'react';
-type PositionChangeHandler = (params?: { start?: number, end?: number, oldItems?: ReactNode, newItems?: ReactNode }) => void
+type RevertHandler = () => void
+type PositionChangeParams = { 
+    start?: number // Index of the item being dragged
+    end?: number // Index of the item being displaced by the starting item
+    oldItems?: ReactNode[] // Array of children before reordering
+    newItems?: ReactNode[] // Array of children after reordering
+    revert: RevertHandler // A fallback handler to revert the reordering
+}
+type PositionChangeHandler = (params?: PositionChangeParams) => void
 ```
 ## Author
 [Sahil Aggarwal](https://www.github.com/SahilAggarwal2004)

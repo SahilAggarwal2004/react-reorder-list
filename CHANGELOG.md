@@ -1,4 +1,7 @@
-# 0.4.0 (26-01-2024)
+# 0.5.0 (26-01-2024)
+- **added:** `preserveOrder` prop in `<ReorderList>` component. See [ReorderList Component API Reference](https://www.npmjs.com/package/react-reorder-list#reorderlist-component-api-reference)
+- **fixed:** a bug where library would not work in production if `useOnlyIconToDrag` is set to `true`.
+## 0.4.0 (26-01-2024)
 - **added:** `revert` handler/function in params of `onPositionChange` handler. See type [PositionChangeHandler](https://www.npmjs.com/package/react-reorder-list#positionchangehandler)
 ## 0.3.1 (25-01-2024)
 - **changed:** `disable` prop to `disabled`. See [ReorderList Component API Reference](https://www.npmjs.com/package/react-reorder-list#reorderlist-component-api-reference)

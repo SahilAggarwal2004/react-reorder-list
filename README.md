@@ -43,9 +43,9 @@ export default function App() {
 #### Usage with ReorderIcon
 The dragging behavior can be changed using the `useOnlyIconToDrag` prop of `<ReorderList>` component.
 
-If set to `true`, an item can be dragged only using the `<ReorderIcon>` present inside the item.
-
 If set to `false`, an item can be dragged by clicking anywhere inside the item.
+
+If set to `true`, an item can be dragged only using the `<ReorderIcon>` present inside the item.
 ```jsx
 import React from 'react'
 import ReorderList, { ReorderIcon } from 'react-reorder-list'
@@ -67,9 +67,13 @@ export default function App() {
 #### Listen to Children Updates
 `<ReorderList>` can listen to updates to it's children components using the `watchChildrenUpdates` prop as shown below.
 
-If set to `true`, updates to children like state changes, additions/omissions of children components will reflect in real time. Note that if an item is being dragged and an update occurs at the moment, that item will be placed at respective location and `onPositionChange` will be called to prevent any inconsistency.
+If set to `false`, any updates made in children component except reordering by user won't reflect.
 
-If set to `false`, any updates made in children component except reordering won't reflect.
+If set to `true`, updates to children like state changes, additions/omissions of children components will reflect in real time.<br>
+Further if `preserveOrder` is set to false, the order in which new children appear will be maintained.<br>
+Whereas if `preserveOrder` is set to true, the order of existing items will be preserved as before the update occured and new items will be placed at the end irrespective of their order in children. Also, if an item is being dragged and an update occurs at that moment, that item will be placed at respective location and `onPositionChange` will be called to prevent any inconsistency.
+
+NOTE: The props `watchChildrenUpdates` and `preserveOrder` should be used carefully to avoid any unexpected behaviour
 ```jsx
 import React, { useState } from 'react'
 import ReorderList from 'react-reorder-list'
@@ -130,6 +134,7 @@ Here is the full API for the `<ReorderList>` component, these properties can be 
 | `selectedItemOpacity` | `Number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
 | `animationDuration` | `Number` | No | 400 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
 | `watchChildrenUpdates` | `Boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
+| `preserveOrder` | `Boolean` | No | false | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates) |
 | `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
 | `disabled` | `Boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
 | `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |

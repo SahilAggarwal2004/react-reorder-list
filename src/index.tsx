@@ -6,7 +6,7 @@ export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivEle
 
 export type PositionChangeHandler = (params?: { start?: number, end?: number, oldItems?: ReactNode[], newItems?: ReactNode[], revert?: () => void }) => void
 
-export type ReorderListProps = { useOnlyIconToDrag?: boolean, selectedItemOpacity?: number, animationDuration?: number, watchChildrenUpdates: boolean, onPositionChange?: PositionChangeHandler, disabled?: boolean, props?: Props, children?: ReactNode }
+export type ReorderListProps = { useOnlyIconToDrag?: boolean, selectedItemOpacity?: number, animationDuration?: number, watchChildrenUpdates?: boolean, preserveOrder?: boolean, onPositionChange?: PositionChangeHandler, disabled?: boolean, props?: Props, children?: ReactNode }
 
 type DragEvent = DragEventHandler<HTMLDivElement>
 
@@ -18,7 +18,7 @@ export type { IconProps } from './icons.js'
 
 const ReorderItemRef = forwardRef(ReorderItem)
 
-export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpacity = 0.5, animationDuration = 400, watchChildrenUpdates = false, onPositionChange, disabled = false, props, children }: ReorderListProps) {
+export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpacity = 0.5, animationDuration = 400, watchChildrenUpdates = false, preserveOrder = false, onPositionChange, disabled = false, props, children }: ReorderListProps) {
     const ref = useRef<HTMLDivElement>(null)
     const [start, setStart] = useState(-1)
     const [selected, setSelected] = useState(-1)
@@ -31,19 +31,21 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
 
     useEffect(() => {
         if (!watchChildrenUpdates) return
-        if (selected !== -1) handleDragEnd(selected)
-        const items: ReactNode[] = []
-        const newItems: ReactNode[] = []
-        Children.forEach(children, child => {
-            const index = findIndex((child as JSX.Element)?.key ?? child?.toString())
-            if (index === -1) newItems.push(child)
-            else items[index] = child
-        })
-        setItems(items.filter(item => item !== undefined).concat(newItems))
+        if (selected !== -1) handleDragEnd(selected, preserveOrder)
+        if (preserveOrder) {
+            const items: ReactNode[] = []
+            const newItems: ReactNode[] = []
+            Children.forEach(children, child => {
+                const index = findIndex((child as JSX.Element)?.key ?? child?.toString())
+                if (index === -1) newItems.push(child)
+                else items[index] = child
+            })
+            setItems(items.filter(item => item !== undefined).concat(newItems))
+        } else setItems(Children.toArray(children))
     }, [children])
 
-    function handleDragEnd(end: number) {
-        if (end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items!) })
+    function handleDragEnd(end: number, handlePositionChange: boolean = true) {
+        if (handlePositionChange && end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items!) })
         setStart(-1)
         setSelected(-1)
     }
@@ -96,12 +98,14 @@ function ReorderItem({ useOnlyIconToDrag, style, onDragStart, onDragEnter, onDra
     if (!useOnlyIconToDrag) props = { ...props, onPointerEnter, onPointerLeave }
     const recursiveClone = (children: ReactNode): ReactNode => Children.map(children, child => {
         if (!isValidElement(child)) return child
-        const childProps: Props = useOnlyIconToDrag && (child as JSX.Element).type.name === 'ReorderIcon' ? { onPointerEnter, onPointerLeave } : {}
+        const childProps: Props = child.type === ReorderIcon ? { onPointerEnter, onPointerLeave } : {}
         return cloneElement((child as JSX.Element), { children: recursiveClone(child.props.children), ...childProps })
     })
-    const recursiveChildren = useMemo(() => recursiveClone(children), [children])
+    const recursiveChildren = useMemo(() => useOnlyIconToDrag ? recursiveClone(children) : children, [children])
 
     return <div ref={ref} style={style} {...props}>{recursiveChildren}</div>;
 }
 
-export const ReorderIcon = ({ children = <PiDotsSixVerticalBold />, style, ...props }: Props) => <span style={{ cursor: "grab", ...style }} {...props}>{children}</span>
+export function ReorderIcon({ children = <PiDotsSixVerticalBold />, style, ...props }: Props) {
+    return <span style={{ cursor: "grab", ...style }} {...props}>{children}</span>
+}

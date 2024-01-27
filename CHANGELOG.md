@@ -1,4 +1,6 @@
-# 0.5.0 (26-01-2024)
+# 0.6.0 (27-01-2024)
+- **added:** support for mobile devices
+## 0.5.0 (26-01-2024)
 - **added:** `preserveOrder` prop in `<ReorderList>` component. See [ReorderList Component API Reference](https://www.npmjs.com/package/react-reorder-list#reorderlist-component-api-reference)
 - **fixed:** a bug where library would not work in production if `useOnlyIconToDrag` is set to `true`.
 ## 0.4.0 (26-01-2024)

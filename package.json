@@ -1,6 +1,6 @@
 {
   "name": "react-reorder-list",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A simple react component that facilitates the reordering of JSX/HTML elements through drag-and-drop functionality, allowing for easy position changes.",
   "type": "module",
   "main": "dist/index.js",
@@ -34,5 +34,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.48"
+  },
+  "dependencies": {
+    "drag-drop-touch": "^1.3.1"
   }
 }

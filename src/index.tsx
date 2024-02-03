@@ -152,7 +152,7 @@ function ReorderItem({ useOnlyIconToDrag, onTouchEnd: propOnTouchEnd, children, 
   const recursiveClone = (children: ReactNode): ReactNode =>
     Children.map(children, (child) => {
       if (!isValidElement(child)) return child;
-      return cloneElement(child as JSX.Element, { children: recursiveClone(child.props.children), ...(child.type === ReorderIcon && draggableProps) });
+      return cloneElement(child, child.type === ReorderIcon ? draggableProps : {}, recursiveClone((child as JSX.Element).props.children));
     });
   const recursiveChildren = useMemo(() => (useOnlyIconToDrag ? recursiveClone(children) : children), [useOnlyIconToDrag, children]);
 

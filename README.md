@@ -162,13 +162,13 @@ export default function App() {
 Here is the full API for the `<ReorderList>` component, these properties can be set on an instance of ReorderList:
 | Parameter | Type | Required | Default | Description |
 | - | - | - | - | - |
-| `useOnlyIconToDrag` | `Boolean` | No | false | See [usage with ReorderIcon](#usage-with-reordericon) |
-| `selectedItemOpacity` | `Number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
-| `animationDuration` | `Number` | No | 400 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
-| `watchChildrenUpdates` | `Boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
-| `preserveOrder` | `Boolean` | No | false | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates) |
+| `useOnlyIconToDrag` | `boolean` | No | false | See [usage with ReorderIcon](#usage-with-reordericon) |
+| `selectedItemOpacity` | `number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
+| `animationDuration` | `number` | No | 400 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
+| `watchChildrenUpdates` | `boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
+| `preserveOrder` | `boolean` | No | false | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates) |
 | `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
-| `disabled` | `Boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
+| `disabled` | `boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
 | `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |
 
 ### Types

@@ -123,6 +123,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                 }}
                 onDragEnd={handleDragEnd}
                 onTouchMove={(event) => {
+                  if (start === -1) return;
                   const { clientX, screenX, clientY, screenY } = event.touches[0];
                   let left = 0,
                     top = 0;

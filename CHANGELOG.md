@@ -1,6 +1,6 @@
 # 0.6.3 (05-02-2034)
 
-- **fixed:** minor scrolling bug tha was occuring on touch devices.
+- **fixed:** minor scrolling bug that was occuring on touch devices.
 
 ## 0.6.1 (03-02-2034)
 

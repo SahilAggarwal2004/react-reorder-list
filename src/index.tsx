@@ -1,12 +1,12 @@
-import React, { CSSProperties, Children, DragEvent, DragEventHandler, ForwardedRef, ReactNode, TouchEventHandler, cloneElement, createRef, forwardRef, isValidElement, useEffect, useMemo, useRef, useState } from "react";
+import React, { CSSProperties, Children, DetailedHTMLProps, DragEvent, DragEventHandler, ForwardedRef, HTMLAttributes, ReactNode, TouchEventHandler, cloneElement, createRef, forwardRef, isValidElement, useEffect, useMemo, useRef, useState } from "react";
 import { PiDotsSixVerticalBold } from "./icons.js";
 import Animation from "./animation.js";
-import useDraggable, { Props } from "./hooks.js";
+import { useDraggable } from "./hooks.js";
 
 // @ts-ignore
 if (typeof window !== "undefined") import("drag-drop-touch");
 
-export type { Props } from "./hooks.js";
+export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 export type PositionChangeHandler = (params?: { start?: number; end?: number; oldItems?: ReactNode[]; newItems?: ReactNode[]; revert?: () => void }) => void;
 
@@ -29,7 +29,7 @@ type DivTouchEventHandler = TouchEventHandler<HTMLDivElement>;
 type ReorderItemProps = {
   useOnlyIconToDrag: boolean;
   style: CSSProperties;
-  onDragStart: DivDragEventHandler;
+  onDragStart?: DivDragEventHandler;
   onDragEnter: DivDragEventHandler;
   onDragEnd: DivDragEventHandler;
   onTouchMove: DivTouchEventHandler;
@@ -123,6 +123,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                 }}
                 onDragEnd={handleDragEnd}
                 onTouchMove={(event) => {
+                  event.stopPropagation();
                   if (start === -1) return;
                   const { clientX, screenX, clientY, screenY } = event.touches[0];
                   let left = 0,
@@ -150,6 +151,7 @@ function ReorderItem({ useOnlyIconToDrag, onTouchEnd: propOnTouchEnd, children, 
     draggable,
     draggableProps: { onTouchEnd: draggableOnTouchEnd, ...draggableProps },
   } = useDraggable();
+  if (!draggable) props.onDragStart = undefined;
   const recursiveClone = (children: ReactNode): ReactNode =>
     Children.map(children, (child) => {
       if (!isValidElement(child)) return child;
@@ -164,6 +166,7 @@ function ReorderItem({ useOnlyIconToDrag, onTouchEnd: propOnTouchEnd, children, 
       {...props}
       {...(!useOnlyIconToDrag && draggableProps)}
       onTouchEnd={(event) => {
+        event.stopPropagation();
         draggableOnTouchEnd!(event);
         propOnTouchEnd(event);
       }}

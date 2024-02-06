@@ -1,12 +1,16 @@
-import { DetailedHTMLProps, HTMLAttributes, useState } from "react";
+import { MouseEvent, TouchEvent, useState } from "react";
 
-export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-
-export default function useDraggable(initValue: boolean = false) {
+export function useDraggable(initValue: boolean = false) {
   const [draggable, setDraggable] = useState(initValue);
-  const enableDragging = () => setDraggable(true);
-  const disableDragging = () => setDraggable(false);
-  const draggableProps: Props = { onMouseEnter: enableDragging, onMouseLeave: disableDragging, onTouchStart: enableDragging, onTouchEnd: disableDragging };
+  const enableDragging = (event: MouseEvent | TouchEvent) => {
+    event.stopPropagation();
+    setDraggable(true);
+  };
+  const disableDragging = (event: MouseEvent | TouchEvent) => {
+    event.stopPropagation();
+    setDraggable(false);
+  };
+  const draggableProps = { onMouseEnter: enableDragging, onMouseLeave: disableDragging, onTouchStart: enableDragging, onTouchEnd: disableDragging };
 
   return { draggable, draggableProps };
 }

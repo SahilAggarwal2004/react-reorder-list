@@ -123,7 +123,6 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                 }}
                 onDragEnd={handleDragEnd}
                 onTouchMove={(event) => {
-                  event.stopPropagation();
                   if (start === -1) return;
                   const { clientX, screenX, clientY, screenY } = event.touches[0];
                   let left = 0,
@@ -166,8 +165,7 @@ function ReorderItem({ useOnlyIconToDrag, onTouchEnd: propOnTouchEnd, children, 
       {...props}
       {...(!useOnlyIconToDrag && draggableProps)}
       onTouchEnd={(event) => {
-        event.stopPropagation();
-        draggableOnTouchEnd!(event);
+        draggableOnTouchEnd();
         propOnTouchEnd(event);
       }}
     >

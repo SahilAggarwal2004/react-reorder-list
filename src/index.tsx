@@ -22,11 +22,11 @@ export type ReorderListProps = {
   children?: ReactNode;
 };
 
-type DivDragEventHandler = DragEventHandler<HTMLDivElement>;
+export type DivDragEventHandler = DragEventHandler<HTMLDivElement>;
 
-type DivTouchEventHandler = TouchEventHandler<HTMLDivElement>;
+export type DivTouchEventHandler = TouchEventHandler<HTMLDivElement>;
 
-type ReorderItemProps = {
+export type ReorderItemProps = {
   useOnlyIconToDrag: boolean;
   style: CSSProperties;
   onDragStart?: DivDragEventHandler;
@@ -146,10 +146,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
 }
 
 function ReorderItem({ useOnlyIconToDrag, onTouchEnd: propOnTouchEnd, children, ...props }: ReorderItemProps, ref: ForwardedRef<HTMLDivElement>) {
-  const {
-    draggable,
-    draggableProps: { onTouchEnd: draggableOnTouchEnd, ...draggableProps },
-  } = useDraggable();
+  const [draggable, { onTouchEnd: draggableOnTouchEnd, ...draggableProps }] = useDraggable();
   if (!draggable) props.onDragStart = undefined;
   const recursiveClone = (children: ReactNode): ReactNode =>
     Children.map(children, (child) => {

@@ -6,5 +6,5 @@ export function useDraggable(initValue: boolean = false) {
   const disableDragging = () => setDraggable(false);
   const draggableProps = { onMouseEnter: enableDragging, onMouseLeave: disableDragging, onTouchStart: enableDragging, onTouchEnd: disableDragging };
 
-  return { draggable, draggableProps };
+  return [draggable, draggableProps] as const;
 }

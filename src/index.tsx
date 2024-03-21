@@ -53,7 +53,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
   const [scroll, setScroll] = useState<{ left: number; top: number }>();
   const refs = useMemo(() => items.map((_) => createRef<HTMLDivElement>()), [items]);
 
-  const findIndex = (key: string | undefined) => (key ? items.findIndex((item) => ((item as JSX.Element)?.key?.split(".$").at(-1) ?? item?.toString()) === key) : -1);
+  const findIndex = (key: string | null) => (key ? items.findIndex((item) => (item as JSX.Element)?.key?.split(".$").at(-1) === key) : -1);
 
   useEffect(() => {
     if (!watchChildrenUpdates) return;
@@ -62,7 +62,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
       const items: ReactNode[] = [];
       const newItems: ReactNode[] = [];
       Children.forEach(children, (child) => {
-        const index = findIndex((child as JSX.Element)?.key ?? child?.toString());
+        const index = findIndex((child as JSX.Element)?.key);
         if (index === -1) newItems.push(child);
         else items[index] = child;
       });
@@ -94,9 +94,10 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
       ) : (
         <Animation duration={+(start !== -1 && !scroll) && animationDuration}>
           {Children.map(items, (child, i) => {
+            if (!isValidElement(child)) return child;
             return (
               <ReorderItemRef
-                key={(child as JSX.Element)?.key ?? child?.toString()}
+                key={child.key}
                 ref={refs[i]}
                 useOnlyIconToDrag={useOnlyIconToDrag}
                 style={{ opacity: selected === i ? selectedItemOpacity : 1, touchAction: "pan-y" }}

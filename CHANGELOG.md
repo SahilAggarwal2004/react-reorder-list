@@ -1,4 +1,8 @@
-# 0.6.3 (05-02-2034)
+# 0.6.7 (21-03-2024)
+
+- **removed:** proper support invalid react elements.
+
+## 0.6.3 (05-02-2034)
 
 - **fixed:** minor scrolling bug that was occuring on touch devices.
 

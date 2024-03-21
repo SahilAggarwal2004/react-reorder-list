@@ -4,18 +4,23 @@ type AnimationProps = { duration: number; children: ReactNode };
 
 type BoundingBox = { [key: string]: DOMRect };
 
+const getKey = (child: ReactNode) => (child as JSX.Element)?.key?.split("/.")[0];
+
+function calculateBoundingBoxes(children: ReactNode) {
+  const boundingBoxes: BoundingBox = {};
+  Children.forEach(children, (child) => {
+    const key = getKey(child);
+    if (key) boundingBoxes[key] = ((child as any).ref.current as HTMLElement).getBoundingClientRect();
+  });
+  return boundingBoxes;
+}
+
 function usePrevious<T>(value: T): T | undefined {
   const prevChildrenRef = useRef<T>();
   useEffect(() => {
     prevChildrenRef.current = value;
   }, [value]);
   return prevChildrenRef.current;
-}
-
-function calculateBoundingBoxes(children: ReactNode) {
-  const boundingBoxes: BoundingBox = {};
-  Children.forEach(children, (child) => (boundingBoxes[((child as any).key as string).split("/.")[0]] = ((child as any).ref.current as HTMLElement).getBoundingClientRect()));
-  return boundingBoxes;
 }
 
 export default function Animation({ duration, children }: AnimationProps) {
@@ -30,8 +35,9 @@ export default function Animation({ duration, children }: AnimationProps) {
   useLayoutEffect(() => {
     if (duration > 0 && prevBoundingBox && Object.keys(prevBoundingBox).length)
       Children.forEach(children, (child) => {
-        const domNode: HTMLElement = (child as any).ref.current;
-        const key = ((child as any).key as string).split("/.")[0];
+        const domNode: HTMLElement = (child as any)?.ref?.current;
+        const key = getKey(child);
+        if (!key) return;
         const { left: prevLeft, top: prevTop }: DOMRect = prevBoundingBox[key] || {};
         const { left, top }: DOMRect = boundingBox[key];
         const changeInX = prevLeft - left,

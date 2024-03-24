@@ -1,10 +1,10 @@
-import { useState, useLayoutEffect, ReactNode, Children, useEffect, useRef } from "react";
+import { useState, useLayoutEffect, ReactNode, Children } from "react";
+import { usePrevious } from "./hooks.js";
+import { getKey } from "./utils.js";
 
 type AnimationProps = { duration: number; children: ReactNode };
 
 type BoundingBox = { [key: string]: DOMRect };
-
-const getKey = (child: ReactNode) => (child as JSX.Element)?.key?.split("/.")[0];
 
 function calculateBoundingBoxes(children: ReactNode) {
   const boundingBoxes: BoundingBox = {};
@@ -13,14 +13,6 @@ function calculateBoundingBoxes(children: ReactNode) {
     if (key) boundingBoxes[key] = ((child as any).ref.current as HTMLElement).getBoundingClientRect();
   });
   return boundingBoxes;
-}
-
-function usePrevious<T>(value: T): T | undefined {
-  const prevChildrenRef = useRef<T>();
-  useEffect(() => {
-    prevChildrenRef.current = value;
-  }, [value]);
-  return prevChildrenRef.current;
 }
 
 export default function Animation({ duration, children }: AnimationProps) {

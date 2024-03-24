@@ -1,4 +1,8 @@
-# 0.6.7 (21-03-2024)
+# 0.7.0 (24-03-2024)
+
+- **added:** `data-disable-reorder` prop for children of `<ReorderList>` component. See [usage with data-disable-reorder](https://www.npmjs.com/package/react-reorder-list#disable-reordering-for-individual-children)
+
+## 0.6.7 (21-03-2024)
 
 - **removed:** proper support invalid react elements.
 

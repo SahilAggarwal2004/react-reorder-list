@@ -7,7 +7,8 @@ A simple react component that facilitates the reordering of JSX/HTML elements th
 - Reorders list of elements using drag and drop.
 - Easy to use
 - Smooth transition using animation.
-- Listen to children updates. See [listen to children updates](#listen-to-children-updates)
+- Listens to children updates. See [listen to children updates](#listen-to-children-updates)
+- Disables reordering for individual children. See [disable reordering for individual children](#disable-reordering-for-individual-children)
 - Handles nested lists easily. See [nested list usage](#nested-list-usage)
 
 ## Installation
@@ -121,6 +122,29 @@ export default function App() {
       </ReorderList>
       <button onClick={setNewArray}>Click me</button>
     </div>
+  );
+}
+```
+
+#### Disable reordering for individual children
+
+```jsx
+import React from "react";
+import ReorderList from "react-reorder-list";
+
+export default function App() {
+  return (
+    <ReorderList>
+      <div key="div" data-disable-reorder={true}>
+        This div cannot be reordered
+      </div>
+      {[0, 1, 2, 3, 4].map((i) => {
+        return <div key={i}>Item {i}</div>; // Having a unique key is important
+      })}
+      <p key="p" data-disable-reorder={true}>
+        This p cannot be reordered either
+      </p>
+    </ReorderList>
   );
 }
 ```

@@ -1,4 +1,8 @@
-# 0.7.0 (24-03-2024)
+# 0.7.2 (16-04-2024)
+
+- **changed:** switched from [pnpm](https://pnpm.io/) to [bun](https://bun.sh/)
+
+## 0.7.0 (24-03-2024)
 
 - **added:** `data-disable-reorder` prop for children of `<ReorderList>` component. See [usage with data-disable-reorder](https://www.npmjs.com/package/react-reorder-list#disable-reordering-for-individual-children)
 

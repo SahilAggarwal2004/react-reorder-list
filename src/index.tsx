@@ -1,7 +1,8 @@
-import React, { CSSProperties, Children, DetailedHTMLProps, DragEvent, DragEventHandler, ForwardedRef, HTMLAttributes, ReactNode, RefObject, TouchEventHandler, cloneElement, createRef, forwardRef, isValidElement, useEffect, useMemo, useRef, useState } from "react";
+import React, { CSSProperties, Children, DetailedHTMLProps, DragEvent, DragEventHandler, HTMLAttributes, JSX, ReactNode, RefObject, TouchEventHandler, cloneElement, createRef, isValidElement, useEffect, useMemo, useRef, useState } from "react";
 import Animation from "./animation.js";
-import { PiDotsSixVerticalBold } from "./icons.js";
+import { scrollThreshold } from "./constants.js";
 import { useDraggable } from "./hooks.js";
+import { PiDotsSixVerticalBold } from "./icons.js";
 import { swap } from "./utils.js";
 
 // @ts-ignore
@@ -30,6 +31,7 @@ export type DivTouchEventHandler = TouchEventHandler<HTMLDivElement>;
 export type ReorderItemProps = {
   useOnlyIconToDrag: boolean;
   disable: boolean;
+  ref: RefObject<HTMLDivElement | null>;
   style: CSSProperties;
   onDragStart?: DivDragEventHandler;
   onDragEnter: DivDragEventHandler;
@@ -41,9 +43,42 @@ export type ReorderItemProps = {
 
 export type { IconProps } from "./icons.js";
 
-const scrollThreshold = { x: 10, y: 100 };
+export function ReorderIcon({ children = <PiDotsSixVerticalBold />, style, ...props }: Props) {
+  return (
+    <span style={{ cursor: "grab", ...style }} {...props}>
+      {children}
+    </span>
+  );
+}
 
-const ReorderItemRef = forwardRef(ReorderItem);
+function ReorderItem({ useOnlyIconToDrag, disable, ref, style, children, onTouchEnd: propOnTouchEnd, ...events }: ReorderItemProps) {
+  const [draggable, { onTouchEnd: draggableOnTouchEnd, ...draggableProps }] = useDraggable();
+  if (!draggable) events.onDragStart = undefined;
+  const recursiveClone = (children: ReactNode): ReactNode =>
+    Children.map(children, (child) => {
+      if (!isValidElement(child)) return child;
+      return cloneElement(child, child.type === ReorderIcon ? draggableProps : {}, recursiveClone((child as JSX.Element).props.children));
+    });
+  const recursiveChildren = useMemo(() => (useOnlyIconToDrag ? recursiveClone(children) : children), [useOnlyIconToDrag, children]);
+
+  return (
+    <div
+      ref={ref}
+      draggable={!disable && draggable}
+      style={style}
+      {...(!disable && {
+        ...events,
+        ...(!useOnlyIconToDrag && draggableProps),
+        onTouchEnd: (event) => {
+          draggableOnTouchEnd();
+          propOnTouchEnd(event);
+        },
+      })}
+    >
+      {recursiveChildren}
+    </div>
+  );
+}
 
 export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpacity = 0.5, animationDuration = 400, watchChildrenUpdates = false, preserveOrder = false, onPositionChange, disabled = false, props, children }: ReorderListProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -55,7 +90,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
   const [scroll, setScroll] = useState<{ left: number; top: number }>();
   const [refs, disableArr] = useMemo(
     () =>
-      items.reduce<[RefObject<HTMLDivElement>[], boolean[]]>(
+      items.reduce<[RefObject<HTMLDivElement | null>[], boolean[]]>(
         ([refs, disableArr], item) => {
           return [refs.concat(createRef<HTMLDivElement>()), disableArr.concat((item as JSX.Element)?.props?.["data-disable-reorder"])];
         },
@@ -107,7 +142,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
           {items.map((child, i) => {
             if (!isValidElement(child)) return child;
             return (
-              <ReorderItemRef
+              <ReorderItem
                 key={child.key}
                 ref={refs[i]}
                 useOnlyIconToDrag={useOnlyIconToDrag}
@@ -117,7 +152,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                   event.stopPropagation();
                   setStart(i);
                   setSelected(i);
-                  setTemp({ items, rect: ref.current!.children[i].getBoundingClientRect() });
+                  setTemp({ items, rect: (ref.current!.childNodes[i] as HTMLDivElement).getBoundingClientRect?.() || {} });
                 }}
                 onDragEnter={(event) => {
                   event.stopPropagation();
@@ -156,48 +191,11 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                 onTouchEnd={() => setScroll(undefined)}
               >
                 {child}
-              </ReorderItemRef>
+              </ReorderItem>
             );
           })}
         </Animation>
       )}
     </div>
-  );
-}
-
-function ReorderItem({ useOnlyIconToDrag, disable, style, children, onTouchEnd: propOnTouchEnd, ...events }: ReorderItemProps, ref: ForwardedRef<HTMLDivElement>) {
-  const [draggable, { onTouchEnd: draggableOnTouchEnd, ...draggableProps }] = useDraggable();
-  if (!draggable) events.onDragStart = undefined;
-  const recursiveClone = (children: ReactNode): ReactNode =>
-    Children.map(children, (child) => {
-      if (!isValidElement(child)) return child;
-      return cloneElement(child, child.type === ReorderIcon ? draggableProps : {}, recursiveClone((child as JSX.Element).props.children));
-    });
-  const recursiveChildren = useMemo(() => (useOnlyIconToDrag ? recursiveClone(children) : children), [useOnlyIconToDrag, children]);
-
-  return (
-    <div
-      ref={ref}
-      draggable={!disable && draggable}
-      style={style}
-      {...(!disable && {
-        ...events,
-        ...(!useOnlyIconToDrag && draggableProps),
-        onTouchEnd: (event) => {
-          draggableOnTouchEnd();
-          propOnTouchEnd(event);
-        },
-      })}
-    >
-      {recursiveChildren}
-    </div>
-  );
-}
-
-export function ReorderIcon({ children = <PiDotsSixVerticalBold />, style, ...props }: Props) {
-  return (
-    <span style={{ cursor: "grab", ...style }} {...props}>
-      {children}
-    </span>
   );
 }

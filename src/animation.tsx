@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, ReactNode, Children } from "react";
+import { useState, useLayoutEffect, ReactNode, Children, ReactElement, RefObject } from "react";
 import { usePrevious } from "./hooks.js";
 import { getKey } from "./utils.js";
 
@@ -6,11 +6,13 @@ type AnimationProps = { duration: number; children: ReactNode };
 
 type BoundingBox = { [key: string]: DOMRect };
 
+type Child = ReactElement<{ ref: RefObject<HTMLElement> }>;
+
 function calculateBoundingBoxes(children: ReactNode) {
   const boundingBoxes: BoundingBox = {};
   Children.forEach(children, (child) => {
     const key = getKey(child);
-    if (key) boundingBoxes[key] = ((child as any).ref.current as HTMLElement).getBoundingClientRect();
+    if (key) boundingBoxes[key] = (child as Child).props.ref.current.getBoundingClientRect();
   });
   return boundingBoxes;
 }
@@ -27,11 +29,11 @@ export default function Animation({ duration, children }: AnimationProps) {
   useLayoutEffect(() => {
     if (duration > 0 && prevBoundingBox && Object.keys(prevBoundingBox).length)
       Children.forEach(children, (child) => {
-        const domNode: HTMLElement = (child as any)?.ref?.current;
         const key = getKey(child);
         if (!key) return;
-        const { left: prevLeft, top: prevTop }: DOMRect = prevBoundingBox[key] || {};
-        const { left, top }: DOMRect = boundingBox[key];
+        const domNode = (child as Child).props.ref.current;
+        const { left: prevLeft, top: prevTop } = prevBoundingBox[key] || {};
+        const { left, top } = boundingBox[key];
         const changeInX = prevLeft - left,
           changeInY = prevTop - top;
         if (changeInX || changeInY)

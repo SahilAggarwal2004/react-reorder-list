@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { JSX, ReactNode } from "react";
 
 export const getKey = (child: ReactNode) => (child as JSX.Element)?.key?.split("/.")[0];
 

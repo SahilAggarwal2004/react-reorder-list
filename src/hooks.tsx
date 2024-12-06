@@ -9,8 +9,8 @@ export function useDraggable(initValue: boolean = false) {
   return [draggable, draggableProps] as const;
 }
 
-export function usePrevious<T>(value: T): T | undefined {
-  const prevChildrenRef = useRef<T>();
+export function usePrevious<T>(value: T): T | null {
+  const prevChildrenRef = useRef<T>(null);
   useEffect(() => {
     prevChildrenRef.current = value;
   }, [value]);

@@ -1,4 +1,9 @@
-# 0.8.0 (06-12-2024)
+# 0.8.1 (29-12-2024)
+
+- **refactor:** Replaced `usePrevious` with the new `useStateWithHistory` hook.
+- **chore:** Switched from [bun](https://bun.sh) to [pnpm](https://pnpm.io/).
+
+## 0.8.0 (06-12-2024)
 
 - **breaking:** Dropped support for React.js v18 in favor of React.js v19.
 

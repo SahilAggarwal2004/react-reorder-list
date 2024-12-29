@@ -1,5 +1,5 @@
-import { useState, useLayoutEffect, ReactNode, Children, ReactElement, RefObject } from "react";
-import { usePrevious } from "./hooks.js";
+import { useLayoutEffect, ReactNode, Children, ReactElement, RefObject } from "react";
+import { useStateWithHistory } from "./hooks.js";
 import { getKey } from "./utils.js";
 
 type AnimationProps = { duration: number; children: ReactNode };
@@ -18,8 +18,7 @@ function calculateBoundingBoxes(children: ReactNode) {
 }
 
 export default function Animation({ duration, children }: AnimationProps) {
-  const [boundingBox, setBoundingBox] = useState<BoundingBox>({});
-  const prevBoundingBox = usePrevious(boundingBox);
+  const [boundingBox, prevBoundingBox, setBoundingBox] = useStateWithHistory<BoundingBox>({});
 
   useLayoutEffect(() => {
     if (duration > 0) setBoundingBox(calculateBoundingBoxes(children));

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 export function useDraggable(initValue: boolean = false) {
   const [draggable, setDraggable] = useState(initValue);
@@ -9,10 +9,14 @@ export function useDraggable(initValue: boolean = false) {
   return [draggable, draggableProps] as const;
 }
 
-export function usePrevious<T>(value: T): T | null {
-  const prevChildrenRef = useRef<T>(null);
-  useEffect(() => {
-    prevChildrenRef.current = value;
-  }, [value]);
-  return prevChildrenRef.current;
+export function useStateWithHistory<T>(initValue: T) {
+  const [state, setState] = useState<T>(initValue);
+  const [prevState, setPrevState] = useState<T>();
+
+  function setStateWithHistory(value: T) {
+    setPrevState(state);
+    setState(value);
+  }
+
+  return [state, prevState, setStateWithHistory] as const;
 }

@@ -212,6 +212,6 @@ type PositionChangeParams = {
 type PositionChangeHandler = (params?: PositionChangeParams) => void;
 ```
 
-## Author
+## License
 
-[Sahil Aggarwal](https://www.github.com/SahilAggarwal2004)
+This project is licensed under the [MIT License](LICENSE).

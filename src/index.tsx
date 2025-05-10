@@ -10,7 +10,7 @@ if (typeof window !== "undefined") import("drag-drop-touch");
 
 export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
-export type PositionChangeHandler = (params?: { start?: number; end?: number; oldItems?: ReactNode[]; newItems?: ReactNode[]; revert?: () => void }) => void;
+export type PositionChangeHandler = (event: { start: number; end: number; oldItems: ReactNode[]; newItems: ReactNode[]; revert: Function }) => void;
 
 export type ReorderListProps = {
   useOnlyIconToDrag?: boolean;
@@ -85,7 +85,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
   const [start, setStart] = useState(-1);
   const [selected, setSelected] = useState(-1);
   const [items, setItems] = useState<ReactNode[]>(Children.toArray(children));
-  const [temp, setTemp] = useState<{ items?: ReactNode[]; rect?: DOMRect }>({});
+  const [temp, setTemp] = useState<{ items: ReactNode[]; rect?: DOMRect }>({ items: [] });
   const [isAnimating, setIsAnimating] = useState(false);
   const [scroll, setScroll] = useState<{ left: number; top: number }>();
   const [refs, disableArr] = useMemo(
@@ -128,7 +128,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
 
   function handleDragEnd(event: DragEvent | null, end: number = selected, handlePositionChange: boolean = true) {
     event?.stopPropagation();
-    if (handlePositionChange && end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items!) });
+    if (handlePositionChange && end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items) });
     setStart(-1);
     setSelected(-1);
   }
@@ -162,7 +162,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                   if (event.clientX - left > Math.min(startWidth, width) || event.clientY - top > Math.min(startHeight, height)) return;
                   setSelected(i);
                   setItems(() => {
-                    const items = temp.items!.slice();
+                    const items = temp.items.slice();
                     const shiftForward = start < i;
                     const increment = shiftForward ? 1 : -1;
                     let key = start;

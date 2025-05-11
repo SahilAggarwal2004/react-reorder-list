@@ -65,7 +65,7 @@ function ReorderItem({ useOnlyIconToDrag, disable, ref, style, children, onTouch
     <div
       ref={ref}
       draggable={!disable && draggable}
-      style={style}
+      style={{ ...style, touchAction: "pan-y", cursor: useOnlyIconToDrag ? "default" : "grab" }}
       {...(!disable && {
         ...events,
         ...(!useOnlyIconToDrag && draggableProps),
@@ -147,7 +147,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
                 ref={refs[i]}
                 useOnlyIconToDrag={useOnlyIconToDrag}
                 disable={disableArr[i]}
-                style={{ opacity: selected === i ? selectedItemOpacity : 1, touchAction: "pan-y" }}
+                style={{ opacity: selected === i ? selectedItemOpacity : 1 }}
                 onDragStart={(event) => {
                   event.stopPropagation();
                   setStart(i);

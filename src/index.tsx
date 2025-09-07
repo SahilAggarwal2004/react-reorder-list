@@ -99,21 +99,19 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
     [items]
   );
 
-  const findIndex = (key: string | null) => (key ? items.findIndex((item) => (item as JSX.Element)?.key?.split(".$").at(-1) === key) : -1);
+  const findIndex = (key: string | null) => (key ? items.findIndex((item) => (item as JSX.Element)?.key === key) : -1);
 
   useEffect(() => {
     if (!watchChildrenUpdates) return;
     if (selected !== -1) handleDragEnd(null, selected, preserveOrder);
-    if (preserveOrder) {
-      const items: ReactNode[] = [];
-      const newItems: ReactNode[] = [];
-      Children.forEach(children, (child) => {
-        const index = findIndex((child as JSX.Element)?.key);
-        if (index === -1) newItems.push(child);
-        else items[index] = child;
-      });
-      setItems(items.filter((item) => item !== undefined).concat(newItems));
-    } else setItems(Children.toArray(children));
+    const items: ReactNode[] = [];
+    const newItems: ReactNode[] = [];
+    Children.forEach(children, (child, index) => {
+      if (preserveOrder) index = findIndex((child as JSX.Element)?.key);
+      if (index === -1) newItems.push(child);
+      else items[index] = child;
+    });
+    setItems(items.filter((item) => item !== undefined).concat(newItems));
   }, [children]);
 
   useEffect(() => {

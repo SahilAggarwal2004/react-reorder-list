@@ -1,7 +1,0 @@
-.vscode
-node_modules
-src
-.gitignore
-CHANGELOG.md
-pnpm-lock.yaml
-tsconfig.json

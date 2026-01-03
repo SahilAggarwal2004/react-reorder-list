@@ -1,49 +1,15 @@
-import React, { CSSProperties, Children, DetailedHTMLProps, DragEvent, DragEventHandler, HTMLAttributes, JSX, ReactNode, RefObject, TouchEventHandler, cloneElement, createRef, isValidElement, useEffect, useMemo, useRef, useState } from "react";
-import Animation from "./animation.js";
+import React, { Children, DragEvent, JSX, ReactNode, RefObject, cloneElement, createRef, isValidElement, useEffect, useMemo, useRef, useState } from "react";
+import { Animation } from "./components.js";
 import { scrollThreshold } from "./constants.js";
 import { useDraggable } from "./hooks.js";
 import { PiDotsSixVerticalBold } from "./icons.js";
-import { swap } from "./utils.js";
+import { swap } from "./lib/utils.js";
+import { DivProps, ReorderItemProps, ReorderListProps } from "./types.js";
 
 // @ts-ignore
 if (typeof window !== "undefined") import("drag-drop-touch");
 
-export type Props = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
-
-export type PositionChangeHandler = (event: { start: number; end: number; oldItems: ReactNode[]; newItems: ReactNode[]; revert: Function }) => void;
-
-export type ReorderListProps = {
-  useOnlyIconToDrag?: boolean;
-  selectedItemOpacity?: number;
-  animationDuration?: number;
-  watchChildrenUpdates?: boolean;
-  preserveOrder?: boolean;
-  onPositionChange?: PositionChangeHandler;
-  disabled?: boolean;
-  props?: Props;
-  children?: ReactNode;
-};
-
-export type DivDragEventHandler = DragEventHandler<HTMLDivElement>;
-
-export type DivTouchEventHandler = TouchEventHandler<HTMLDivElement>;
-
-export type ReorderItemProps = {
-  useOnlyIconToDrag: boolean;
-  disable: boolean;
-  ref: RefObject<HTMLDivElement | null>;
-  style: CSSProperties;
-  onDragStart?: DivDragEventHandler;
-  onDragEnter: DivDragEventHandler;
-  onDragEnd: DivDragEventHandler;
-  onTouchMove: DivTouchEventHandler;
-  onTouchEnd: DivTouchEventHandler;
-  children: ReactNode;
-};
-
-export type { IconProps } from "./icons.js";
-
-export function ReorderIcon({ children = <PiDotsSixVerticalBold />, style, ...props }: Props) {
+export function ReorderIcon({ children = <PiDotsSixVerticalBold />, style, ...props }: DivProps) {
   return (
     <span style={{ cursor: "grab", ...style }} {...props}>
       {children}
@@ -52,13 +18,14 @@ export function ReorderIcon({ children = <PiDotsSixVerticalBold />, style, ...pr
 }
 
 function ReorderItem({ useOnlyIconToDrag, disable, ref, style, children, onTouchEnd: propOnTouchEnd, ...events }: ReorderItemProps) {
-  const [draggable, { onTouchEnd: draggableOnTouchEnd, ...draggableProps }] = useDraggable();
-  if (!draggable) events.onDragStart = undefined;
+  const { draggable, onTouchEnd: draggableOnTouchEnd, ...draggableProps } = useDraggable();
+
   const recursiveClone = (children: ReactNode): ReactNode =>
     Children.map(children, (child) => {
       if (!isValidElement(child)) return child;
       return cloneElement(child, child.type === ReorderIcon ? draggableProps : {}, recursiveClone((child as JSX.Element).props.children));
     });
+
   const recursiveChildren = useMemo(() => (useOnlyIconToDrag ? recursiveClone(children) : children), [useOnlyIconToDrag, children]);
 
   return (
@@ -70,7 +37,7 @@ function ReorderItem({ useOnlyIconToDrag, disable, ref, style, children, onTouch
         ...events,
         ...(!useOnlyIconToDrag && draggableProps),
         onTouchEnd: (event) => {
-          draggableOnTouchEnd();
+          draggableOnTouchEnd(event);
           propOnTouchEnd(event);
         },
       })}
@@ -80,7 +47,7 @@ function ReorderItem({ useOnlyIconToDrag, disable, ref, style, children, onTouch
   );
 }
 
-export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpacity = 0.5, animationDuration = 400, watchChildrenUpdates = false, preserveOrder = false, onPositionChange, disabled = false, props, children }: ReorderListProps) {
+export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpacity = 0.5, animationDuration = 300, watchChildrenUpdates = false, preserveOrder = false, onPositionChange, disabled = false, props, children }: ReorderListProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [start, setStart] = useState(-1);
   const [selected, setSelected] = useState(-1);

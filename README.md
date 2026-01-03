@@ -188,7 +188,7 @@ Here is the full API for the `<ReorderList>` component, these properties can be 
 | - | - | - | - | - |
 | `useOnlyIconToDrag` | `boolean` | No | false | See [usage with ReorderIcon](#usage-with-reordericon) |
 | `selectedItemOpacity` | `number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
-| `animationDuration` | `number` | No | 400 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
+| `animationDuration` | `number` | No | 300 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
 | `watchChildrenUpdates` | `boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
 | `preserveOrder` | `boolean` | No | false | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates) |
 | `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |

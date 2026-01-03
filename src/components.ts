@@ -1,23 +1,9 @@
-import { useLayoutEffect, ReactNode, Children, ReactElement, RefObject } from "react";
+import { Children, useLayoutEffect } from "react";
 import { useStateWithHistory } from "./hooks.js";
-import { getKey } from "./utils.js";
+import { calculateBoundingBoxes, getKey } from "./lib/react.js";
+import { AnimationProps, BoundingBox, Child } from "./types.js";
 
-type AnimationProps = { duration: number; children: ReactNode };
-
-type BoundingBox = { [key: string]: DOMRect };
-
-type Child = ReactElement<{ ref: RefObject<HTMLElement> }>;
-
-function calculateBoundingBoxes(children: ReactNode) {
-  const boundingBoxes: BoundingBox = {};
-  Children.forEach(children, (child) => {
-    const key = getKey(child);
-    if (key) boundingBoxes[key] = (child as Child).props.ref.current.getBoundingClientRect();
-  });
-  return boundingBoxes;
-}
-
-export default function Animation({ duration, children }: AnimationProps) {
+export function Animation({ duration, children }: AnimationProps) {
   const [boundingBox, prevBoundingBox, setBoundingBox] = useStateWithHistory<BoundingBox>({});
 
   useLayoutEffect(() => {

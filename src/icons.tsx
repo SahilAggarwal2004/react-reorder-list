@@ -1,6 +1,5 @@
 import React from "react";
-
-export type IconProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>;
+import { IconProps } from "./types.js";
 
 export function PiDotsSixVerticalBold(props: IconProps) {
   return (

@@ -1,3 +1,20 @@
+# Changelog
+
+## [0.8.6](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.8.5...v0.8.6) (2026-01-04)
+
+### Chores
+
+* Add release-it for automated versioning and changelog.  ([8a504a5](https://github.com/SahilAggarwal2004/react-reorder-list/commit/8a504a5df9b09ba03442657d7708f97f6fd9dfaf))
+
+### Code Refactoring
+
+* Centralize types in `types.ts` and update exports from package root.  ([b3cd94d](https://github.com/SahilAggarwal2004/react-reorder-list/commit/b3cd94d573dc41e0ce0dfceb40503f0e602975c6))
+* Modularize `index.tsx`.  ([1eff4ed](https://github.com/SahilAggarwal2004/react-reorder-list/commit/1eff4edac688741c33f5396117f4fc2563330a0b))
+
+### Build System
+
+* Configure tsup for package bundling.  ([5285cab](https://github.com/SahilAggarwal2004/react-reorder-list/commit/5285cab8139db0880efe4360f15956ba5ba28745))
+
 ## 0.8.1 (2024-12-29)
 
 * **refactor:** Replaced `usePrevious` with the new `useStateWithHistory` hook.

@@ -1,6 +1,6 @@
 {
   "name": "react-reorder-list",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "A simple react component that facilitates the reordering of JSX/HTML elements through drag-and-drop functionality, allowing for easy position changes.",
   "license": "MIT",
   "author": "Sahil Aggarwal <aggarwalsahil2004@gmail.com>",

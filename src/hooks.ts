@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
-import { DivMouseEventHandler, DivTouchEventHandler } from "./types";
+
+import type { DivMouseEventHandler, DivTouchEventHandler } from "./types";
 
 export function useDraggable(initValue: boolean = false): {
   draggable: boolean;

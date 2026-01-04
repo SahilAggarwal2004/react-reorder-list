@@ -1,4 +1,4 @@
-import { CSSProperties, DetailedHTMLProps, DragEventHandler, HTMLAttributes, MouseEventHandler, ReactElement, ReactNode, RefObject, TouchEventHandler } from "react";
+import type { CSSProperties, DetailedHTMLProps, DragEventHandler, HTMLAttributes, MouseEventHandler, ReactElement, ReactNode, RefObject, TouchEventHandler } from "react";
 
 // lib/react.ts
 export type BoundingBox = { [key: string]: DOMRect };

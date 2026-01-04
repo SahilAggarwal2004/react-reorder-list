@@ -181,26 +181,38 @@ export default function App() {
 }
 ```
 
-## ReorderList Component API Reference
+## API Reference
+
+### ReorderList Component
 
 Here is the full API for the `<ReorderList>` component, these properties can be set on an instance of ReorderList:
-| Parameter | Type | Required | Default | Description |
-| - | - | - | - | - |
-| `useOnlyIconToDrag` | `boolean` | No | false | See [usage with ReorderIcon](#usage-with-reordericon) |
-| `selectedItemOpacity` | `number (0 to 1)` | No | 0.5 | This determines the opacity of the item being dragged, until released. |
-| `animationDuration` | `number` | No | 300 | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled. |
-| `watchChildrenUpdates` | `boolean` | No | false | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
-| `preserveOrder` | `boolean` | No | false | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates) |
-| `onPositionChange` | [`PositionChangeHandler`](#positionchangehandler) | No | - | Function to be executed on item position change. |
-| `disabled` | `boolean` | No | false | When set to true, `<ReorderList>` will work as a plain `div` with no functionality. |
-| `props` | `React.DetailedHTMLProps` | No | - | Props to customize the `<ReorderList>` component. |
 
-### Types
+| Parameter              | Type                                              | Required | Default | Description                                                                                                                                                         |
+| ---------------------- | ------------------------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useOnlyIconToDrag`    | `boolean`                                         | No       | false   | See [usage with ReorderIcon](#usage-with-reordericon)                                                                                                               |
+| `selectedItemOpacity`  | `number (0 to 1)`                                 | No       | 0.5     | This determines the opacity of the item being dragged, until released.                                                                                              |
+| `animationDuration`    | `number`                                          | No       | 300     | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled.                                                                  |
+| `watchChildrenUpdates` | `boolean`                                         | No       | false   | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
+| `preserveOrder`        | `boolean`                                         | No       | false   | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates)       |
+| `onPositionChange`     | [`PositionChangeHandler`](#positionchangehandler) | No       | -       | Function to be executed on item position change.                                                                                                                    |
+| `disabled`             | `boolean`                                         | No       | false   | When set to true, `<ReorderList>` will work as a plain `div` with no functionality.                                                                                 |
+| `props`                | [`DivProps`](#divprops)                           | No       | -       | Props to customize the `<ReorderList>` component.                                                                                                                   |
 
-#### PositionChangeHandler
+## Types
+
+### DivProps
 
 ```typescript
-import { ReactNode } from "react";
+import type { DetailedHTMLProps, HTMLAttributes } from "react";
+
+type DivProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+```
+
+### PositionChangeHandler
+
+```typescript
+import type { ReactNode } from "react";
+
 type RevertHandler = () => void;
 type PositionChangeParams = {
   start?: number; // Index of the item being dragged

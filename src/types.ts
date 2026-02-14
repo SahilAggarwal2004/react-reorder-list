@@ -11,7 +11,7 @@ export type AnimationProps = { duration: number; children: ReactNode };
 // icons.tsx
 export type IconProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>;
 
-// index.tsx
+// index.ts
 export type DivDragEventHandler = DragEventHandler<HTMLDivElement>;
 
 export type DivMouseEventHandler = MouseEventHandler<HTMLDivElement>;

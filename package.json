@@ -40,10 +40,10 @@
     "react": "^19.0.0"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^10.0.4",
-    "@types/react": "^19.2.7",
+    "@release-it/conventional-changelog": "^10.0.5",
+    "@types/react": "^19.2.14",
     "prettier-package-json": "^2.8.0",
-    "release-it": "^19.2.2",
+    "release-it": "^19.2.4",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
   },

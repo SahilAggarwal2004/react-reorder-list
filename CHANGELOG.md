@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.10.0](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.9.0...v0.10.0) (2026-02-14)
+
+### ⚠ BREAKING CHANGES
+
+* Switch to key-based ordering and update onPositionChange contract
+
+### Bug Fixes
+
+* Prevent unstable reorder state when children update during drag.  ([47350e6](https://github.com/SahilAggarwal2004/react-reorder-list/commit/47350e603b436e8808d69f5aa2676cb5513726dd))
+
+### Code Refactoring
+
+* Switch to key-based ordering and update onPositionChange contract.  ([d50affc](https://github.com/SahilAggarwal2004/react-reorder-list/commit/d50affc0785b382d802e5c7c0cfd260f93bd2a2a))
+
 ## [0.9.0](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.8.6...v0.9.0) (2026-02-14)
 
 ### Chores

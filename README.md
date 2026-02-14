@@ -4,10 +4,11 @@ A simple react component that facilitates the reordering of JSX/HTML elements th
 
 ## Features
 
-- Reorders list of elements using drag and drop.
+- Reorders list of elements using drag and drop
 - Easy to use
-- Smooth transition using animation.
-- Listens to children updates. See [listen to children updates](#listen-to-children-updates)
+- Smooth transition using animation
+- Automatically syncs with children updates
+- Preserves user's custom order when children change
 - Disables reordering for individual children. See [disable reordering for individual children](#disable-reordering-for-individual-children)
 - Handles nested lists easily. See [nested list usage](#nested-list-usage)
 
@@ -63,35 +64,42 @@ If set to `false`, an item can be dragged by clicking anywhere inside the item.
 If set to `true`, an item can be dragged only using the `<ReorderIcon>` present inside the item.
 
 ```jsx
-import React from 'react'
-import ReorderList, { ReorderIcon } from 'react-reorder-list'
+import React from "react";
+import ReorderList, { ReorderIcon } from "react-reorder-list";
 
 export default function App() {
-  return <ReorderList useOnlyIconToDrag={true}>
-    {[0, 1, 2, 3, 4].map(i => {
-      return <div key={i}>
-        <ReorderIcon /> {/* Default icon */}
-        <ReorderIcon>
-          {/* Custom icon/component */}
-        </Reordericon>
-        <span>{i}</span>
-      </div>
-    })}
-  </ReorderList>
+  return (
+    <ReorderList useOnlyIconToDrag={true}>
+      {[0, 1, 2, 3, 4].map((i) => {
+        return (
+          <div key={i}>
+            <ReorderIcon /> {/* Default icon */}
+            <ReorderIcon>{/* Custom icon/component */}</ReorderIcon>
+            <span>{i}</span>
+          </div>
+        );
+      })}
+    </ReorderList>
+  );
 }
 ```
 
-#### Listen to Children Updates
+#### Handling Children Updates
 
-`<ReorderList>` can listen to updates to it's children components using the `watchChildrenUpdates` prop as shown below.
+`<ReorderList>` automatically syncs with updates to its children components. When the children change (e.g., items added/removed, or state updates), the component intelligently handles the update based on the `preserveOrder` prop.
 
-If set to `false`, any updates made in children component except reordering by user won't reflect.
+**With `preserveOrder={true}` (default):**
 
-If set to `true`, updates to children like state changes, additions/omissions of children components will reflect in real time.<br>
-Further if `preserveOrder` is set to false, the order in which new children appear will be maintained.<br>
-Whereas if `preserveOrder` is set to true, the order of existing items will be preserved as before the update occured and new items will be placed at the end irrespective of their order in children. Also, if an item is being dragged and an update occurs at that moment, that item will be placed at respective location and `onPositionChange` will be called to prevent any inconsistency.
+- The user's custom reorder is preserved
+- New items are added at the end
+- Removed items are cleanly removed
+- Any in-progress drag is cancelled to prevent inconsistencies
 
-NOTE: The props `watchChildrenUpdates` and `preserveOrder` should be used carefully to avoid any unexpected behaviour
+**With `preserveOrder={false}:`**
+
+- The order resets to match the new children order
+- User's custom ordering is discarded
+- Useful for server-controlled or filtered lists
 
 ```jsx
 import React, { useState } from "react";
@@ -100,27 +108,23 @@ import ReorderList from "react-reorder-list";
 export default function App() {
   const [array, setArray] = useState([0, 1, 2, 3, 4]);
 
-  function setNewArray() {
-    setArray((prev) => {
-      const array = [];
-      prev.forEach((_) => {
-        do {
-          var item = Math.floor(Math.random() * 9);
-        } while (array.includes(item));
-        array.push(item);
-      });
-      return array;
-    });
+  function addItem() {
+    setArray((prev) => [...prev, Math.max(...prev) + 1]);
+  }
+
+  function removeItem() {
+    setArray((prev) => prev.slice(0, -1));
   }
 
   return (
     <div>
-      <ReorderList watchChildrenUpdates={true} animationDuration={200}>
+      <ReorderList preserveOrder={true} animationDuration={200}>
         {array.map((i) => (
           <div key={i}>Item {i}</div>
         ))}
       </ReorderList>
-      <button onClick={setNewArray}>Click me</button>
+      <button onClick={addItem}>Add Item</button>
+      <button onClick={removeItem}>Remove Item</button>
     </div>
   );
 }
@@ -187,16 +191,15 @@ export default function App() {
 
 Here is the full API for the `<ReorderList>` component, these properties can be set on an instance of ReorderList:
 
-| Parameter              | Type                                              | Required | Default | Description                                                                                                                                                         |
-| ---------------------- | ------------------------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `useOnlyIconToDrag`    | `boolean`                                         | No       | false   | See [usage with ReorderIcon](#usage-with-reordericon)                                                                                                               |
-| `selectedItemOpacity`  | `number (0 to 1)`                                 | No       | 0.5     | This determines the opacity of the item being dragged, until released.                                                                                              |
-| `animationDuration`    | `number`                                          | No       | 300     | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled.                                                                  |
-| `watchChildrenUpdates` | `boolean`                                         | No       | false   | Enable this to listen to any updates in children of `<ReorderList>` and update the state accordingly. See [listen to children updates](#listen-to-children-updates) |
-| `preserveOrder`        | `boolean`                                         | No       | false   | Works along woth `watchChildrenUpdates` to determine whether to preserve existing order or not. See [listen to children updates](#listen-to-children-updates)       |
-| `onPositionChange`     | [`PositionChangeHandler`](#positionchangehandler) | No       | -       | Function to be executed on item position change.                                                                                                                    |
-| `disabled`             | `boolean`                                         | No       | false   | When set to true, `<ReorderList>` will work as a plain `div` with no functionality.                                                                                 |
-| `props`                | [`DivProps`](#divprops)                           | No       | -       | Props to customize the `<ReorderList>` component.                                                                                                                   |
+| Parameter             | Type                                              | Required | Default | Description                                                                                                                                                          |
+| --------------------- | ------------------------------------------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useOnlyIconToDrag`   | `boolean`                                         | No       | false   | See [usage with ReorderIcon](#usage-with-reordericon)                                                                                                                |
+| `selectedItemOpacity` | `number (0 to 1)`                                 | No       | 0.5     | This determines the opacity of the item being dragged, until released.                                                                                               |
+| `animationDuration`   | `number`                                          | No       | 300     | The duration (in ms) of swapping animation between items. If set to 0, animation will be disabled.                                                                   |
+| `preserveOrder`       | `boolean`                                         | No       | true    | When true, preserves user's custom order when children update. When false, resets to new children order. See [handling children updates](#handling-children-updates) |
+| `onPositionChange`    | [`PositionChangeHandler`](#positionchangehandler) | No       | -       | Function to be executed on item position change.                                                                                                                     |
+| `disabled`            | `boolean`                                         | No       | false   | When set to true, `<ReorderList>` will work as a plain `div` with no functionality.                                                                                  |
+| `props`               | [`DivProps`](#divprops)                           | No       | -       | Props to customize the `<ReorderList>` component.                                                                                                                    |
 
 ## Types
 
@@ -211,17 +214,18 @@ type DivProps = DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement
 ### PositionChangeHandler
 
 ```typescript
-import type { ReactNode } from "react";
+import type { Key } from "react";
 
+type Order = Key[];
 type RevertHandler = () => void;
-type PositionChangeParams = {
-  start?: number; // Index of the item being dragged
-  end?: number; // Index of the item being displaced by the starting item
-  oldItems?: ReactNode[]; // Array of children before reordering
-  newItems?: ReactNode[]; // Array of children after reordering
+
+export type PositionChangeHandler = (event: {
+  start: number; // Index of the item being dragged
+  end: number; // Index where the item was dropped
+  oldOrder: Order; // Array of keys before reordering
+  newOrder: Order; // Array of keys after reordering
   revert: RevertHandler; // A fallback handler to revert the reordering
-};
-type PositionChangeHandler = (params?: PositionChangeParams) => void;
+}) => void;
 ```
 
 ## License

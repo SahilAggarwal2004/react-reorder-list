@@ -1,7 +1,7 @@
 import type { CSSProperties, DetailedHTMLProps, DragEventHandler, HTMLAttributes, MouseEventHandler, ReactElement, ReactNode, RefObject, TouchEventHandler } from "react";
 
 // lib/react.ts
-export type BoundingBox = { [key: string]: DOMRect };
+export type BoundingBox = Record<string, DOMRect>;
 
 export type Child = ReactElement<{ ref: RefObject<HTMLElement> }>;
 

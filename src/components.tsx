@@ -98,16 +98,23 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
         ([refs, disableArr], item) => {
           return [refs.concat(createRef<HTMLDivElement>()), disableArr.concat((item as JSX.Element)?.props?.["data-disable-reorder"])];
         },
-        [[], []]
+        [[], []],
       ),
-    [items]
+    [items],
   );
 
   const findIndex = (key: string | null) => (key ? items.findIndex((item) => (item as JSX.Element)?.key === key) : -1);
 
-  useEffect(() => {
+  function handleDragEnd(event: DragEvent | null) {
+    event?.stopPropagation();
+    if (selected !== start) onPositionChange?.({ start, end: selected, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items) });
+    setStart(-1);
+    setSelected(-1);
+    updateChildren();
+  }
+
+  function updateChildren() {
     if (!watchChildrenUpdates) return;
-    if (selected !== -1) handleDragEnd(null, selected, preserveOrder);
     const items: ReactNode[] = [];
     const newItems: ReactNode[] = [];
     Children.forEach(children, (child, index) => {
@@ -116,6 +123,10 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
       else items[index] = child;
     });
     setItems(items.filter((item) => item !== undefined).concat(newItems));
+  }
+
+  useEffect(() => {
+    if (start === -1) updateChildren();
   }, [children]);
 
   useEffect(() => {
@@ -127,13 +138,6 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
     }, 20);
     return () => clearInterval(interval);
   }, [scroll]);
-
-  function handleDragEnd(event: DragEvent | null, end: number = selected, handlePositionChange: boolean = true) {
-    event?.stopPropagation();
-    if (handlePositionChange && end !== start) onPositionChange?.({ start, end, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items) });
-    setStart(-1);
-    setSelected(-1);
-  }
 
   return (
     <div ref={ref} {...props}>

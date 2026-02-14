@@ -8,7 +8,7 @@ import { areOrdersEqual, swap } from "./lib/utils.js";
 import type { AnimationProps, BoundingBox, DivProps, DivRef, Order, ReorderItemProps, ReorderListProps } from "./types.js";
 
 // @ts-ignore
-// if (typeof window !== "undefined") import("drag-drop-touch");
+if (typeof window !== "undefined") import("drag-drop-touch");
 
 function Animation({ duration, children }: AnimationProps) {
   const [boundingBox, prevBoundingBox, setBoundingBox] = useStateWithHistory<BoundingBox>({});

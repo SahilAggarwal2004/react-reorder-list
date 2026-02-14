@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.9.0](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.8.6...v0.9.0) (2026-02-14)
+
+### Chores
+
+* **deps:** Update @release-it/conventional-changelog, @types/react and release-it.  ([0ced970](https://github.com/SahilAggarwal2004/react-reorder-list/commit/0ced970cd27e704dbe3c2348756a9f63cde1ff20))
+* Rename `index.tsx` to `index.ts`.  ([6bc0643](https://github.com/SahilAggarwal2004/react-reorder-list/commit/6bc0643e829f39df589b372c23fd27cf15068af8))
+
+### Features
+
+* Defer children synchronization until drag completes to preserve interaction stability.  ([be4a35d](https://github.com/SahilAggarwal2004/react-reorder-list/commit/be4a35d846a114f31a74d3497c83c687d05a5d5d))
+
 ## [0.8.6](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.8.5...v0.8.6) (2026-01-04)
 
 ### Chores

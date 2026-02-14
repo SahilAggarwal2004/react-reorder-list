@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.1](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.0...v0.10.1) (2026-02-14)
+
+### Bug Fixes
+
+* Re-enable drag-drop-touch polyfill for touch support.  ([ec3bc44](https://github.com/SahilAggarwal2004/react-reorder-list/commit/ec3bc44cb5277c021f4bbb0d1c878e50811b88ba))
+
 ## [0.10.0](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.9.0...v0.10.0) (2026-02-14)
 
 ### ⚠ BREAKING CHANGES

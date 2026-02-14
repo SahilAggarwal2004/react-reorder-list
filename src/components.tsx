@@ -106,15 +106,17 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
   const findIndex = (key: string | null) => (key ? items.findIndex((item) => (item as JSX.Element)?.key === key) : -1);
 
   function handleDragEnd(event: DragEvent | null) {
-    event?.stopPropagation();
-    if (selected !== start) onPositionChange?.({ start, end: selected, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items) });
+    if (event) {
+      event.stopPropagation();
+      if (selected !== start) onPositionChange?.({ start, end: selected, oldItems: temp.items, newItems: items, revert: () => setItems(temp.items) });
+    }
     setStart(-1);
     setSelected(-1);
-    updateChildren();
   }
 
-  function updateChildren() {
+  useEffect(() => {
     if (!watchChildrenUpdates) return;
+    if (selected !== -1) handleDragEnd(null);
     const items: ReactNode[] = [];
     const newItems: ReactNode[] = [];
     Children.forEach(children, (child, index) => {
@@ -123,10 +125,6 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
       else items[index] = child;
     });
     setItems(items.filter((item) => item !== undefined).concat(newItems));
-  }
-
-  useEffect(() => {
-    if (start === -1) updateChildren();
   }, [children]);
 
   useEffect(() => {

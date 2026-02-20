@@ -1,6 +1,6 @@
 import { Children } from "react";
 
-import type { AnimationProps, BoundingBox } from "../types.js";
+import type { AnimationProps, BoundingBox } from "../types";
 
 export function calculateBoundingBoxes(children: AnimationProps["children"]): BoundingBox {
   const boundingBoxes: BoundingBox = {};

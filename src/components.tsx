@@ -1,11 +1,11 @@
 import React, { Children, cloneElement, createRef, DragEvent, isValidElement, JSX, Key, ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { scrollThreshold } from "./constants.js";
-import { useDraggable, useStateWithHistory } from "./hooks.js";
-import { PiDotsSixVerticalBold } from "./icons.js";
-import { calculateBoundingBoxes } from "./lib/react.js";
-import { areOrdersEqual, swap } from "./lib/utils.js";
-import type { AnimationProps, BoundingBox, DivProps, DivRef, Order, ReorderItemProps, ReorderListProps } from "./types.js";
+import { scrollThreshold } from "./constants";
+import { useDraggable, useStateWithHistory } from "./hooks";
+import { PiDotsSixVerticalBold } from "./icons";
+import { calculateBoundingBoxes } from "./lib/react";
+import { areOrdersEqual, swap } from "./lib/utils";
+import type { AnimationProps, BoundingBox, DivProps, DivRef, Order, ReorderItemProps, ReorderListProps } from "./types";
 
 // @ts-ignore
 if (typeof window !== "undefined") import("drag-drop-touch");
@@ -102,7 +102,6 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
     return map;
   }, [children]);
 
-  // Build ordered children for rendering
   const orderedChildren = useMemo(() => {
     if (!order.length) return [];
 

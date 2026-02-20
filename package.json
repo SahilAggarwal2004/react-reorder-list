@@ -15,17 +15,17 @@
   },
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./types": "./dist/types.js"
+    ".": "./dist/index.mjs",
+    "./types": "./dist/types.mjs"
   },
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "pnpm i && pnpm run compile",
-    "compile": "tsup",
-    "dev": "tsup --watch",
+    "compile": "tsdown",
+    "dev": "tsdown --watch",
     "dry-release": "release-it --ci --dry-run",
     "prettier": "prettier-package-json --write package.json",
     "pub": "pnpm login && pnpm publish",
@@ -44,7 +44,7 @@
     "@types/react": "^19.2.14",
     "prettier-package-json": "^2.8.0",
     "release-it": "^19.2.4",
-    "tsup": "^8.5.1",
+    "tsdown": "^0.20.3",
     "typescript": "^5.9.3"
   },
   "keywords": [

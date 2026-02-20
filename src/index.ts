@@ -1,2 +1,1 @@
-export { default } from "./components.js";
-export { ReorderIcon } from "./components.js";
+export { default, ReorderIcon } from "./components";

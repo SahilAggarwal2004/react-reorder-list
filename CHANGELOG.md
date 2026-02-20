@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.2](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.1...v0.10.2) (2026-02-20)
+
+### Build System
+
+* Migrate from tsup to tsdown for library bundling.  ([fde01c8](https://github.com/SahilAggarwal2004/react-reorder-list/commit/fde01c8da092571573d7d9a5f42367a4122d43a4))
+
 ## [0.10.1](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.0...v0.10.1) (2026-02-14)
 
 ### Bug Fixes

@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.10.3](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.2...v0.10.3) (2026-03-05)
+
+### Chores
+
+* **deps:** Update tsdown.  ([0bac6c9](https://github.com/SahilAggarwal2004/react-reorder-list/commit/0bac6c9d6efc6dfc1c05f30085319aa0c906f1d8))
+
+### Bug Fixes
+
+* Correct React key handling and child validation in ReorderList.  ([cd04460](https://github.com/SahilAggarwal2004/react-reorder-list/commit/cd04460c34c5358822f5e27e65741910d8982c7b))
+
 ## [0.10.2](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.1...v0.10.2) (2026-02-20)
 
 ### Build System

@@ -23,7 +23,7 @@ function Animation({ duration, children }: AnimationProps) {
 
     children.forEach((child) => {
       const { key } = child;
-      if (!key) return;
+      if (key == null) return;
       const domNode = child.props.ref.current;
       if (!domNode) return;
       const { left: prevLeft, top: prevTop } = prevBoundingBox[key] || {};
@@ -96,8 +96,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
     Children.forEach(children, (child) => {
       if (!isValidElement<{ "data-disable-reorder"?: boolean }>(child)) return;
       const { key, props } = child;
-      if (!key) return;
-      map.set(key, { child, disabled: props["data-disable-reorder"] });
+      if (key != null) map.set(key, { child, disabled: props["data-disable-reorder"] });
     });
     return map;
   }, [children]);
@@ -106,9 +105,10 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
     if (!order.length) return [];
 
     return order.flatMap((key, orderIndex) => {
-      const { child, disabled } = childMap.get(key) || {};
-      if (!isValidElement(child)) return [];
+      const entry = childMap.get(key);
+      if (!entry) return [];
 
+      const { child, disabled } = entry;
       const ref = getRef(key);
       const isSelected = dragState?.currentIndex === orderIndex;
 
@@ -179,14 +179,16 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
   useEffect(() => {
     const currentKeys: Order = [];
     Children.forEach(children, (child) => {
-      const { key } = child as JSX.Element;
-      if (key) currentKeys.push(key);
+      if (!isValidElement(child)) return;
+      const { key } = child;
+      if (key != null) currentKeys.push(key);
     });
 
     let newOrder: Order;
     if (preserveOrder) {
       const currentKeySet = new Set(currentKeys);
-      const newKeys = currentKeys.filter((key) => !order.includes(key));
+      const orderSet = new Set(order);
+      const newKeys = currentKeys.filter((key) => !orderSet.has(key));
       const filteredOrder = order.filter((key) => currentKeySet.has(key));
       newOrder = [...filteredOrder, ...newKeys];
     } else newOrder = currentKeys;

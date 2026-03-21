@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.4](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.3...v0.10.4) (2026-03-21)
+
+### Chores
+
+* **deps:** Update @release-it/conventional-changelog and tsdown.  ([0c8b4c3](https://github.com/SahilAggarwal2004/react-reorder-list/commit/0c8b4c3d686526668a70aae4b02c53a74ad6e272))
+
 ## [0.10.3](https://github.com/SahilAggarwal2004/react-reorder-list/compare/v0.10.2...v0.10.3) (2026-03-05)
 
 ### Chores

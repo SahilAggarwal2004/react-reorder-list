@@ -1,6 +1,5 @@
+import type { IconProps } from "@/types";
 import React from "react";
-
-import type { IconProps } from "./types";
 
 export function PiDotsSixVerticalBold(props: IconProps) {
   return (

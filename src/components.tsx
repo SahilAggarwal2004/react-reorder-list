@@ -1,11 +1,24 @@
-import React, { Children, cloneElement, createRef, DragEvent, isValidElement, JSX, Key, ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-
-import { scrollThreshold } from "./constants";
-import { useDraggable, useStateWithHistory } from "./hooks";
-import { PiDotsSixVerticalBold } from "./icons";
-import { calculateBoundingBoxes } from "./lib/react";
-import { areOrdersEqual, swap } from "./lib/utils";
-import type { AnimationProps, BoundingBox, DivProps, DivRef, Order, ReorderItemProps, ReorderListProps } from "./types";
+import { scrollThreshold } from "@/constants";
+import { useDraggable, useStateWithHistory } from "@/hooks";
+import { PiDotsSixVerticalBold } from "@/icons";
+import { calculateBoundingBoxes } from "@/lib/react";
+import { areOrdersEqual, swap } from "@/lib/utils";
+import type { AnimationProps, BoundingBox, DivProps, DivRef, Order, ReorderItemProps, ReorderListProps } from "@/types";
+import React, {
+  Children,
+  cloneElement,
+  createRef,
+  isValidElement,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type DragEvent,
+  type JSX,
+  type Key,
+  type ReactNode,
+} from "react";
 
 // @ts-ignore
 if (typeof window !== "undefined") import("drag-drop-touch");
@@ -26,8 +39,9 @@ function Animation({ duration, children }: AnimationProps) {
       if (key == null) return;
       const domNode = child.props.ref.current;
       if (!domNode) return;
-      const { left: prevLeft, top: prevTop } = prevBoundingBox[key] || {};
-      const { left, top } = boundingBox[key] || {};
+      if (!prevBoundingBox[key] || !boundingBox[key]) return;
+      const { left: prevLeft, top: prevTop } = prevBoundingBox[key];
+      const { left, top } = boundingBox[key];
       const changeInX = prevLeft - left;
       const changeInY = prevTop - top;
       if (!changeInX && !changeInY) return;
@@ -83,7 +97,16 @@ function ReorderItem({ useOnlyIconToDrag, disable, ref, style, children, onTouch
   );
 }
 
-export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpacity = 0.5, animationDuration = 300, preserveOrder = true, onPositionChange, disabled = false, props, children }: ReorderListProps) {
+export default function ReorderList({
+  useOnlyIconToDrag = false,
+  selectedItemOpacity = 0.5,
+  animationDuration = 300,
+  preserveOrder = true,
+  onPositionChange,
+  disabled = false,
+  props,
+  children,
+}: ReorderListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef(new Map<Key, DivRef>());
   const [order, setOrder] = useState<Order>([]);
@@ -137,7 +160,7 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
               let currentPos = dragState.startIndex;
               for (let index = dragState.startIndex + increment; shiftForward ? index <= orderIndex : index >= orderIndex; index += increment) {
                 const key = dragState.startOrder[index];
-                if (childMap.get(key)?.disabled) continue;
+                if (childMap.get(key!)?.disabled) continue;
                 swap(newOrder, currentPos, index);
                 currentPos = index;
               }
@@ -149,7 +172,9 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
           onDragEnd={handleDragEnd}
           onTouchMove={(event) => {
             if (!dragState) return;
-            const { clientX, screenX, clientY, screenY } = event.touches[0];
+            const touch = event.touches[0];
+            if (!touch) return;
+            const { clientX, screenX, clientY, screenY } = touch;
             const left = clientX < scrollThreshold.x ? -5 : innerWidth - screenX < scrollThreshold.x ? 5 : 0;
             const top = clientY < scrollThreshold.y ? -10 : innerHeight - screenY < scrollThreshold.y ? 10 : 0;
             setScroll(left || top ? { left, top } : undefined);
@@ -170,7 +195,14 @@ export default function ReorderList({ useOnlyIconToDrag = false, selectedItemOpa
   function handleDragEnd(event: DragEvent | null) {
     if (event) {
       event.stopPropagation();
-      if (dragState && dragState.currentIndex !== dragState.startIndex) onPositionChange?.({ start: dragState.startIndex, end: dragState.currentIndex, oldOrder: dragState.startOrder, newOrder: order, revert: () => setOrder(dragState.startOrder) });
+      if (dragState && dragState.currentIndex !== dragState.startIndex)
+        onPositionChange?.({
+          start: dragState.startIndex,
+          end: dragState.currentIndex,
+          oldOrder: dragState.startOrder,
+          newOrder: order,
+          revert: () => setOrder(dragState.startOrder),
+        });
     }
     setDragState(undefined);
     setScroll(undefined);

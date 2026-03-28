@@ -1,4 +1,4 @@
-import { Order } from "../types";
+import type { Order } from "@/types";
 
 export const areOrdersEqual = (a: Order, b: Order) => a.length === b.length && a.every((key, index) => key === b[index]);
 

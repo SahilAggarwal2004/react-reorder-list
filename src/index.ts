@@ -1,1 +1,1 @@
-export { default, ReorderIcon } from "./components";
+export { default, ReorderIcon } from "@/components";
